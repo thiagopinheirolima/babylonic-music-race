@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
     this.player = {
       score: 0,
       color: "blue",
-      name: "Thiago",
+      name: "Player 1",
     };
     this.players = [this.player];
     this.data = {
