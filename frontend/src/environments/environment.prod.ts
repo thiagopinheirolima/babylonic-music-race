@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  socketURL: "localhost:3000",
+  socketURL: "https://babylonic-music-race.herokuapp.com",
 };
