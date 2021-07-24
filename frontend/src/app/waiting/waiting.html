@@ -1,0 +1,12 @@
+<div class="text-center">
+  <h1 class="text-white text-center mb-4">Players</h1>
+  <div *ngFor="let player of players | async" class="text-center my-2">
+    <h3 [ngStyle]="{ 'color' : player.color }">{{player.nickname}}</h3>
+  </div>
+  <div class="d-grid d-block mt-4">
+    <button class="btn btn-success btn-large" (click)="startGame()">
+      Start
+    </button>
+    <h2 class="text-info text-center mb-4">GAME STATE: {{state | async}}</h2>
+  </div>
+</div>

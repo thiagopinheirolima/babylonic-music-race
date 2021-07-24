@@ -1,1 +1,19 @@
-<h1>Teste</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col">
+      <input
+        placeholder="Nickname"
+        class="form-control"
+        formControlName="nickname"
+        type="name"
+      />
+    </div>
+    <div class="col">
+      <div class="d-grid d-block">
+        <button type="submit" [disabled]="form.invalid" class="btn btn-success">
+          Play
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

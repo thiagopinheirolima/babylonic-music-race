@@ -1,40 +1,64 @@
 declare var Tone: any;
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { Game, Player, SocketService } from "../services/socket.service";
 
 @Component({
   templateUrl: "game.html",
   styleUrls: ["game.css"],
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
   @ViewChild("canvas", { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   keyCount = 0;
-  data: any;
-  player: any;
-  players: any[];
   context?: CanvasRenderingContext2D | null;
   keys = ["A", "S", "D", "F", "J", "K", "L"];
   synth = new Tone.Synth().toDestination();
 
-  constructor() {
-    this.player = {
-      score: 0,
-      color: "blue",
-      name: "Player 1",
-    };
-    this.players = [this.player];
-    this.data = {
-      notes: ["E4", "E4", "E4", "B4", "E4", "G4"],
-      score: 50,
-    };
+  game!: Game;
+  players!: Player[];
+  subscriptions: Subscription[] = [];
+  onKeyPressBinding: any;
+  onKeyUpBinding: any;
+
+  constructor(private socketService: SocketService, private router: Router) {
+    if (this.socketService.connected) {
+      this.subscriptions.push(
+        this.socketService.game.subscribe((game) => {
+          this.game = game;
+          if (!game) {
+            this.router.navigate(["/", "login"]);
+          }
+        }),
+        this.socketService.players.subscribe((players) => {
+          this.players = players;
+        })
+      );
+    } else {
+      this.router.navigate(["/", "login"]);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    document.removeEventListener("keypress", this.onKeyPressBinding);
+    document.removeEventListener("keyup", this.onKeyUpBinding);
   }
 
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext("2d");
-    document.addEventListener("keypress", this.onKeyPress.bind(this));
-    document.addEventListener("keyup", this.onKeyUp.bind(this));
+    this.onKeyPressBinding = this.onKeyPress.bind(this);
+    this.onKeyUpBinding = this.onKeyUp.bind(this);
+    document.addEventListener("keypress", this.onKeyPressBinding);
+    document.addEventListener("keyup", this.onKeyUpBinding);
     this.animate();
-    this.displayNotes();
   }
 
   animate() {
@@ -79,7 +103,8 @@ export class GameComponent implements OnInit {
     const canvasWidth = this.context?.canvas.width || 0;
     const canvasHeight = this.context?.canvas.height || 0;
     const radius = Math.min(canvasWidth / (this.players.length * 4), 30);
-    const steps = (canvasWidth - finishLine - radius * 2) / this.data.score;
+    const steps =
+      (canvasWidth - finishLine - radius * 2) / (this.game?.score || 10);
     const spacer = canvasHeight / this.players.length;
     players.forEach((player: any, index: number) => {
       if (this.context) {
@@ -96,7 +121,7 @@ export class GameComponent implements OnInit {
         );
         this.context.stroke();
         this.context.fillText(
-          player.name,
+          player.nickname,
           2 + steps * player.score,
           2 + radius + spacer * index,
           radius - 4
@@ -110,16 +135,19 @@ export class GameComponent implements OnInit {
     if (index > -1) {
       const keys = document.getElementsByClassName("key");
       const note = keys[index].getAttribute("data-note");
-      const rightNote = this.data.notes[this.keyCount % this.data.notes.length];
-      if (note?.[0] == rightNote[0]) {
+      const rightNote =
+        this.game?.notes[this.keyCount % this.game.notes.length];
+      let score = 0;
+      if (note?.[0] == rightNote?.[0]) {
         keys[index].classList.add("right");
         this.synth.triggerAttackRelease(rightNote, "8n");
-        if (this.player.score < this.data.score) this.player.score++;
+        score = 1;
         this.keyCount++;
       } else {
         keys[index].classList.add("wrong");
-        if (this.player.score > 0) this.player.score--;
+        score = -1;
       }
+      this.socketService.sendScore(score);
     }
   }
 
@@ -133,12 +161,12 @@ export class GameComponent implements OnInit {
   }
 
   displayNotes() {
-    const arr: any[] = [...this.data.notes];
-    const index = this.keyCount % this.data.notes.length;
+    const arr: any[] = [...(this.game?.notes || [])];
+    const index = this.keyCount % (this.game?.notes?.length || this.keyCount);
     if (index) {
       const elements = arr.splice(0, index);
       arr.push(...elements);
     }
-    return arr;
+    return arr.length > 10 ? arr.slice(0, 10) : arr;
   }
 }

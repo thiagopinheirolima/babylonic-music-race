@@ -1,12 +1,16 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { EndedComponent } from './ended/ended.component';
 import { GameComponent } from "./game/game.component";
 import { LoginComponent } from "./login/login.component";
+import { WaitingComponent } from "./waiting/waiting.component";
 
 const routes: Routes = [
-  { path: "login", component: LoginComponent },
   { path: "game", component: GameComponent },
-  { path: "**", redirectTo: "game" },
+  { path: "login", component: LoginComponent },
+  { path: "winner", component: EndedComponent },
+  { path: "waiting", component: WaitingComponent },
+  { path: "**", redirectTo: "login" },
 ];
 
 @NgModule({
