@@ -10,10 +10,11 @@ import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 import { environment } from "src/environments/environment";
 import { WaitingComponent } from './waiting/waiting.component';
 import { EndedComponent } from './ended/ended.component';
+import { TutorialComponent } from "./tutorial/tutorial.component";
 const config: SocketIoConfig = { url: environment.socketURL };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, GameComponent, WaitingComponent, EndedComponent],
+  declarations: [AppComponent, LoginComponent, GameComponent, WaitingComponent, EndedComponent, TutorialComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,4 +25,4 @@ const config: SocketIoConfig = { url: environment.socketURL };
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
