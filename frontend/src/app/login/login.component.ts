@@ -1,11 +1,23 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { SocketService } from "../services/socket.service";
 
 @Component({
   templateUrl: "login.html",
-  styleUrls: ["login.css"],
 })
-export class LoginComponent implements OnInit {
-  constructor() {}
+export class LoginComponent {
+  form: FormGroup;
 
-  ngOnInit(): void {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private socketService: SocketService
+  ) {
+    this.form = this.formBuilder.group({
+      nickname: ["", Validators.required],
+    });
+  }
+
+  onSubmit() {
+    this.socketService.login(this.form.value.nickname);
+  }
 }
