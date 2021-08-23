@@ -1,79 +1,76 @@
-<div class="center" style="padding-top: 200px;">
-    <h1 class="text-warning">Babylonic Music Game</h1>
-</div>
+<div class="container my-4">
 
-<div class="center">
-    <h2 class="text-warning">Tutorial</h2>
-</div>
+    <div class="center pt-4">
+        <h1 class="text-warning">Babylonic Music Game Tutorial</h1>
+    </div>
 
-<div class="center" style="padding-top: 100px;">
-    <canvas #canvas id="game" height="100" width="800"></canvas>
-</div>
+    <div class="center mt-4">
+        <h2 class="text-white mt-4">Pista de Corrida</h2>
+    </div>
 
-<br>
-<div class="center">
-    <h4 class="text-warning">Aqui temos as "pistas de corrida" do jogo, onde você é um dos personagens, e tem que acertar a sequência de notas para ir avançando</h4>
-</div>
-<br>
-<br>
-<br>
-<div class="center">
-    <h4 class="text-warning">Ganha o jogo o primeiro que chegar a linha de chegada!!!!</h4>
-</div>
+    <div class="center">
+        <canvas #canvas id="game" height="100" width="800"></canvas>
+    </div>
 
-<div class="center mt-4" style="padding-top: 300px;">
-    <h3 class="text-warning">Notas</h3>
-</div>
-<br>
-<div class="center">
-    <div id="notes">
-        <div class="notes" *ngFor="let note of displayNotes()">
-            <div class="note">{{note}}</div>
+    <div class="center">
+        <span class="text-white text-center">Aqui temos a pista de corrida do jogo, onde você é um dos personagens, e
+            tem que acertar a sequência de notas para ir avançando. Ganha o jogo o primeiro a chegar na linha de
+            chegada!</span>
+    </div>
+
+    <div class="center mt-4">
+        <h3 class="text-white mt-4">Notas</h3>
+    </div>
+
+    <div class="center">
+        <div id="notes">
+            <div class="notes" *ngFor="let note of displayNotes()">
+                <div class="note">{{note}}</div>
+            </div>
         </div>
     </div>
-</div>
 
-<br>
-<div class="center">
-    <h4 class="text-warning">Aqui vemos a sequência de notas que serão tocadas.</h4>
-</div>
-<br>
-<div class="center">
-    <h4 class="text-warning">A primeira é a nota a ser tocada no momento, e as proximas são as notas que virão na sequência</h4>
-</div>
-
-<div class="center mt-4" style="padding-top: 100px;">
-    <h3 class="text-warning">Teclado</h3>
-</div>
-
-<div class="center">
-    <div id="piano" class="d-flex">
-        <div data-note="C3" class="key white">C</div>
-        <div data-note="D3" class="key white">D</div>
-        <div data-note="E3" class="key white">E</div>
-        <div data-note="F3" class="key white">F</div>
-        <div data-note="G3" class="key white">G</div>
-        <div data-note="A3" class="key white">A</div>
-        <div data-note="B3" class="key white">B</div>
+    <br>
+    <div class="center">
+        <span class="text-white text-center">Aqui vemos a sequência de notas que serão tocadas. A primeira é a nota a
+            ser tocada no momento (em verde), e as proximas são as notas que virão na
+            sequência.</span>
     </div>
-</div>
 
-<br>
-<div class="center">
-    <h4 class="text-warning">Aqui temos nosso teclado virtual, que nesse caso seriam os "botões" para se jogar esse jogo</h4>
-</div>
-<br>
-<div class="center">
-    <h4 class="text-warning">As teclas a serem usadas são respectivamente:</h4>
-</div>
-<div class="center">
-    <h4 class="text-warning"> A S D J K L </h4>
-</div>
+    <div class="center mt-4">
+        <h3 class="text-white mt-4">Teclado</h3>
+    </div>
 
-<div class="center" style="padding-top: 50px;">
-    <h4 class="text-warning"> Pronto para jogar? Clique Aqui: </h4>
-</div>
-<br>
-<div class="center" style="padding-bottom: 60px;">
-    <button class="button" (click)="goToGame()">Jogar</button>
+    <div class="center">
+        <div id="piano" class="d-flex">
+            <div data-note="C3" class="key white">C</div>
+            <div data-note="D3" class="key white">D</div>
+            <div data-note="E3" class="key white">E</div>
+            <div data-note="F3" class="key white">F</div>
+            <div data-note="G3" class="key white">G</div>
+            <div data-note="A3" class="key white">A</div>
+            <div data-note="B3" class="key white">B</div>
+        </div>
+    </div>
+
+    <br>
+    <div class="center">
+        <span class="text-white">Aqui temos nosso teclado virtual, que nesse caso seriam os "botões" para se jogar esse
+            jogo. As teclas a serem usadas são respectivamente: A S D F J K L
+        </span>
+    </div>
+
+    <div class="center  mt-4">
+        <h4 class="text-warning text-center"> Pronto para jogar?</h4>
+    </div>
+    <div class="center">
+        <span class="text-warning text-center">Chegue na linha de chegada para habilitar o botão!</span>
+    </div>
+    <br>
+    <div class="center">
+        <button [disabled]="!gameEnabled()" class="btn btn-success btn-lg" (click)="goToGame()">Jogar!</button>
+    </div>
+    <div class="center mt-2">
+        <button class="btn btn-warning btn-lg" (click)="goToGame()">Já sei jogar!</button>
+    </div>
 </div>

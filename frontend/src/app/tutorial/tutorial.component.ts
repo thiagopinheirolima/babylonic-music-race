@@ -26,7 +26,7 @@ export class TutorialComponent implements OnInit {
     this.players = [this.player];
     this.data = {
       notes: ["E4", "E4", "E4", "B4", "E4", "G4"],
-      score: 50,
+      score: 10,
     };
   }
 
@@ -79,7 +79,7 @@ export class TutorialComponent implements OnInit {
     const finishLine = 20;
     const canvasWidth = this.context?.canvas.width || 0;
     const canvasHeight = this.context?.canvas.height || 0;
-    const radius = Math.min(canvasWidth / (this.players.length * 4), 30);
+    const radius = Math.min(canvasWidth / (this.players.length * 4), 50);
     const steps = (canvasWidth - finishLine - radius * 2) / this.data.score;
     const spacer = canvasHeight / this.players.length;
     players.forEach((player: any, index: number) => {
@@ -141,6 +141,10 @@ export class TutorialComponent implements OnInit {
       arr.push(...elements);
     }
     return arr;
+  }
+
+  gameEnabled() {
+    return this.player?.score == this.data?.score;
   }
 
   goToGame() {

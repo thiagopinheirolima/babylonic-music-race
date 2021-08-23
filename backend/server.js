@@ -21,6 +21,11 @@ const socketServer = io(httpServer, { cors: {} });
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.all('/*', function (req, res, next) {
+  // Just send the index.html for other files to support HTML5Mode
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 socketServer.on("connection", (socket) => {
   console.log("New client connected");
   socket.on("login", (nickname) => playerLogin(socket, nickname));
